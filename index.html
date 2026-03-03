@@ -308,37 +308,56 @@
         const TYPES = { 
             fire: { 
                 col: '#e52d2d', 
-                grad: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', // Contoh: Soft Pink-Red
-                icon: 'fa-fire' 
+                grad: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+                icon: 'fa-fire',
+                txt: '#111' // Warna teks gelap
             }, 
             water: { 
                 col: '#2d89e5', 
-                grad: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)', // Blue Frost
-                icon: 'fa-droplet' 
+                grad: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+                icon: 'fa-droplet',
+                txt: '#111'
             }, 
             grass: { 
                 col: '#5ba339', 
-                grad: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)', // Fresh Leaf
-                icon: 'fa-leaf' 
+                grad: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)',
+                icon: 'fa-leaf',
+                txt: '#111'
             }, 
             electric: { 
                 col: '#f1c40f', 
-                grad: 'linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%)', // Lightning Sky
-                icon: 'fa-bolt-lightning' 
+                grad: 'linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%)',
+                icon: 'fa-bolt-lightning',
+                txt: '#111'
             }, 
             dark: { 
                 col: '#2c3e50', 
-                grad: 'linear-gradient(135deg, #434343 0%, #000000 100%)', // Deep Void
-                icon: 'fa-moon' 
+                grad: 'linear-gradient(135deg, #434343 0%, #000000 100%)',
+                icon: 'fa-moon',
+                txt: '#fff' // Warna teks putih
             }, 
             mythic: { 
                 col: '#8e44ad', 
-                grad: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Royal Purple
-                icon: 'fa-wand-magic-sparkles' 
+                grad: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                icon: 'fa-wand-magic-sparkles',
+                txt: '#fff' // Warna teks putih
             } 
         };
-        const RARITIES = { 'COMMON': { grad: 'var(--grad-common)', hollow: false }, 'UNCOMMON': { grad: 'var(--grad-uncommon)', hollow: false }, 'RARE': { grad: 'var(--grad-rare)', hollow: false }, 'ULTRA RARE': { grad: 'var(--grad-ultra)', hollow: true }, 'MYTHIC': { grad: 'var(--grad-mythic)', hollow: true } };
-        function switchPane(e, id) { document.querySelectorAll('.pane').forEach(p => p.classList.remove('active')); document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active')); document.getElementById(id).classList.add('active'); e.currentTarget.classList.add('active'); }
+
+        const RARITIES = { 
+            'COMMON': { grad: 'var(--grad-common)', hollow: false }, 
+            'UNCOMMON': { grad: 'var(--grad-uncommon)', hollow: false }, 
+            'RARE': { grad: 'var(--grad-rare)', hollow: false }, 
+            'ULTRA RARE': { grad: 'var(--grad-ultra)', hollow: true }, 
+            'MYTHIC': { grad: 'var(--grad-mythic)', hollow: true } 
+        };
+
+        function switchPane(e, id) { 
+            document.querySelectorAll('.pane').forEach(p => p.classList.remove('active')); 
+            document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            e.currentTarget.classList.add('active'); 
+        }
 
         function runEngine() {
             // 1. Core Identity
@@ -350,7 +369,7 @@
             document.getElementById('vCopy').innerText = document.getElementById('inCopy').value;
             document.getElementById('vSerial').innerText = document.getElementById('inSerial').value;
 
-            // 2. Visual Settings (Border & Radius)
+            // 2. Visual Settings
             const bW = document.getElementById('inBorderW').value;
             const bR = document.getElementById('inBorderR').value;
             const bC = document.getElementById('inBorderCol').value;
@@ -360,7 +379,7 @@
             document.getElementById('val-b-w').innerText = bW + "%"; 
             document.getElementById('val-b-r').innerText = bR + "px";
 
-            // 3. Rarity Logic (Badge di Header)
+            // 3. Rarity Logic
             const rarity = document.getElementById('inRarity').value;
             const rData = RARITIES[rarity];
             const vRar = document.getElementById('vRarity');
@@ -368,13 +387,11 @@
 
             vRar.innerText = rarity;
             vRar.style.background = rData.grad;
-            vRar.style.transform = "skew(-15deg)"; // Tetap miring sesuai permintaan terakhir
+            vRar.style.transform = "skew(-15deg)";
             
-            // Shadow untuk Rarity Badge
             const shadowColor = rData.hollow ? 'rgba(255, 215, 0, 0.4)' : 'rgba(0,0,0,0.3)';
             vRar.style.boxShadow = `3px 3px 10px ${shadowColor}`;
 
-            // Reset & Apply Hollow Effect pada Border Luar
             wrap.classList.remove('shining-effect'); 
             if(rData.hollow) { 
                 wrap.style.background = rData.grad; 
@@ -385,26 +402,47 @@
                 vHol.style.display = "none"; 
             }
 
-            // 4. Element Logic (Update Warna Gradient Body & Orb)
+            // 4. Element Logic & Text Color Adaptivity (TAMBAHAN DISINI)
             const type = document.getElementById('inType').value;
             const tData = TYPES[type];
             const orb = document.getElementById('vTypeOrb');
             const vBody = document.getElementById('vBody');
 
-            // Update Icon & Warna Orb
             orb.innerHTML = `<i class="fa-solid ${tData.icon}"></i>`;
             orb.style.background = tData.col;
 
-            // Update Background Body dengan Gradient & Shining Effect
             vBody.style.background = tData.grad;
             vBody.style.backgroundImage = `linear-gradient(110deg, rgba(255,255,255,0.3) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0.3) 60%), ${tData.grad}`;
+
+            // --- LOGIKA GANTI WARNA TEKS OTOMATIS ---
+            const textElements = [
+                'vName', 'vHP', 'vStage', 'vAbName', 'vAbDesc', 
+                'vAtkName', 'vAtkDesc', 'vAtkDmg', 'vAtk2Name', 
+                'vAtk2Desc', 'vAtk2Dmg', 'vCap', 'vAuth', 'vCopy', 
+                'vSerial', 'vSymbol'
+            ];
+
+            textElements.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.style.color = tData.txt; // Gunakan warna txt dari TYPES
+            });
+
+            // Penyesuaian khusus elemen kecil agar tetap terlihat
+            const hpPrefix = document.querySelector('.hp-prefix');
+            if(hpPrefix) hpPrefix.style.color = tData.txt === '#fff' ? '#ff9a9a' : '#cc0000';
+
+            const abBox = document.getElementById('vAbBox');
+            if(abBox) {
+                abBox.style.borderColor = tData.txt === '#fff' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.1)';
+                abBox.style.background = tData.txt === '#fff' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)';
+            }
+            // ---------------------------------------
 
             // 5. Combat Skills Visibility
             document.getElementById('vAbBox').style.display = document.getElementById('togAb').checked ? "block" : "none"; 
             document.getElementById('vAtk1Row').style.display = document.getElementById('togAtk1').checked ? "flex" : "none"; 
             document.getElementById('vAtk2Row').style.display = document.getElementById('togAtk2').checked ? "flex" : "none";
             
-            // Update Text Skills
             document.getElementById('vAbName').innerText = document.getElementById('inAbName').value; 
             document.getElementById('vAbDesc').innerText = document.getElementById('inAbDesc').value; 
             document.getElementById('vAtkName').innerText = document.getElementById('inAtkName').value; 
@@ -421,9 +459,42 @@
             renderCosts('inAtk2Cost', 'vAtk2Cost');
         }
 
-        function renderCosts(inputId, outputId) { const costs = document.getElementById(inputId).value.split(','); const cBox = document.getElementById(outputId); cBox.innerHTML = ''; costs.forEach(c => { const key = c.trim().toLowerCase(); if(TYPES[key]) { cBox.innerHTML += `<div style="width:14px; height:14px; border-radius:50%; background:${TYPES[key].col}; display:flex; align-items:center; justify-content:center; font-size:8px; color:#fff; border:1px solid rgba(255,255,255,0.4)"><i class="fa-solid ${TYPES[key].icon}"></i></div>`; } }); }
-        function handleArt(e) { const reader = new FileReader(); reader.onload = () => document.getElementById('artImg').src = reader.result; reader.readAsDataURL(e.target.files[0]); }
-        function exportFinal() { const btn = document.querySelector('.export-btn'); btn.innerText = "PROCESSING..."; btn.disabled = true; html2canvas(document.getElementById('cardWrapper'), { scale: document.getElementById('inRes').value, useCORS: true, backgroundColor: null, }).then(canvas => { const link = document.createElement('a'); link.download = `CARDXTION_${Date.now()}.png`; link.href = canvas.toDataURL("image/png"); link.click(); btn.innerText = "💾 GENERATE IMAGE"; btn.disabled = false; }); }
+        function renderCosts(inputId, outputId) { 
+            const costs = document.getElementById(inputId).value.split(','); 
+            const cBox = document.getElementById(outputId); 
+            cBox.innerHTML = ''; 
+            costs.forEach(c => { 
+                const key = c.trim().toLowerCase(); 
+                if(TYPES[key]) { 
+                    cBox.innerHTML += `<div style="width:14px; height:14px; border-radius:50%; background:${TYPES[key].col}; display:flex; align-items:center; justify-content:center; font-size:8px; color:#fff; border:1px solid rgba(255,255,255,0.4)"><i class="fa-solid ${TYPES[key].icon}"></i></div>`; 
+                } 
+            }); 
+        }
+
+        function handleArt(e) { 
+            const reader = new FileReader(); 
+            reader.onload = () => document.getElementById('artImg').src = reader.result; 
+            reader.readAsDataURL(e.target.files[0]); 
+        }
+
+        function exportFinal() { 
+            const btn = document.querySelector('.export-btn'); 
+            btn.innerText = "PROCESSING..."; 
+            btn.disabled = true; 
+            html2canvas(document.getElementById('cardWrapper'), { 
+                scale: document.getElementById('inRes').value, 
+                useCORS: true, 
+                backgroundColor: null, 
+            }).then(canvas => { 
+                const link = document.createElement('a'); 
+                link.download = `CARDXTION_${Date.now()}.png`; 
+                link.href = canvas.toDataURL("image/png"); 
+                link.click(); 
+                btn.innerText = "💾 GENERATE IMAGE"; 
+                btn.disabled = false; 
+            }); 
+        }
+
         runEngine();
     </script>
 </body>
